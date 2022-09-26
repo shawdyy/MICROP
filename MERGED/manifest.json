@@ -1,0 +1,106 @@
+{
+  "base": "//cartridges.movableink-templates.com/studio-bundled-apps/c118915d81eed7122bbf75fcb5752af5640b48646f220eedcc8f526a7a074eb5/",
+  "name": "Image Personalization",
+  "authors": [
+    "Nils"
+  ],
+  "html_file": "index.html",
+  "description": "Build an Image Personalization with a WYSIWYG interface",
+  "documentation": "https://support.movableink.com/hc/en-us/articles/360005690134",
+  "category": "data: rendering",
+  "icon_v2": "tools",
+  "width": 400,
+  "height": 300,
+  "expose_advanced_options": true,
+  "fields": [
+    {
+      "name": "microp_dataSourceName",
+      "label": "MICROP Datasource Name",
+      "description": "The Name of your MICROP datasource. You have to reference this name in other Tools.",
+      "type": "text"
+    },
+    {
+      "name": "microp_dataSourceUrl",
+      "label": "MICROP Datasource URL",
+      "type": "text"
+    },
+    {
+      "name": "microp_useProxy",
+      "label": "MICROP Use Proxy",
+      "type": "select",
+      "value": "True",
+      "options":[
+        {
+            "value": "True",
+            "label": "True"
+        },
+        {
+            "value": "False",
+            "label": "False"
+        }
+      ]
+    },
+    {
+      "name": "microp_dataSourceType",
+      "label": "MICROP Datasource type",
+      "type": "select",
+      "value": "html",
+      "options":[
+        {
+            "value": "html",
+            "label": "HTML"
+        },
+        {
+            "value": "json",
+            "label": "JSON"
+        },
+        {
+            "value": "datasource_html",
+            "label": "DataSource HTML"
+        },
+        {
+            "value": "datasource_json",
+            "label": "DataSource JSON"
+        }
+      ]
+    },
+    {
+      "name": "microp_debug",
+      "label": "MICROP Debug",
+      "value": "False",
+      "type": "select",
+      "options": [
+        {
+            "value": "True",
+            "label": "True"
+        },
+        {
+            "value": "False",
+            "label": "False"
+        }
+      ]
+    },
+    {
+      "name": "microp_globalIndex",
+      "label": "MICROP Global Index",
+      "type": "number"
+    }
+  ],
+  "studio_options": {
+    "framework_version": "2.42.0",
+    "tools": [],
+    "property_groups": [],
+    "can_add_packages": true,
+    "package_dependencies": [
+      {
+        "name": "@movable/studio-framework",
+        "version": "2.42.0"
+      }
+    ]
+  },
+  "capture_options": {
+    "timeout": "8s",
+    "cache_ttl": "5s"
+  },
+  "package_manifests": []
+}

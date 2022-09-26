@@ -8,9 +8,7 @@ const _MICROP = window.MICROP;
 return Promise.all(_MICROP.promises).then(() => {
   const parsed = _MICROP.dataSources[dataSourceName.toLowerCase()].data;
   let value = parsed;
-  if(jsonPath.indexOf("[index]") > -1 && (Number(index) === 0 || index)){
-    jsonPath = jsonPath.replace("[index]", index);
-  }
+  jsonPath = _MICROP.evaluateIndex(jsonPath, index, "json");
   const properties = _MICROP.getDynamicPath(jsonPath).split(".");
 
   for(let i = 0; i < properties.length; i++){
