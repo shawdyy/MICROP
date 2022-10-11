@@ -42,8 +42,11 @@ return Promise.all(_MICROP.promises).then(() => {
                 } else if (el.querySelector("source").getAttribute("data-lazysrcset") && el.querySelector("source").getAttribute("data-lazysrcset").match(/^\S+\.jpg/)) {
                     srcset = el.querySelector("source").getAttribute("data-lazysrcset").match(/^\S+\.jpg/)[0]
                 }
+                else if (el.querySelector("source").getAttribute("data-srcset") && el.querySelector("source").getAttribute("data-srcset").match(/^\S+\.jpg/)) {
+                    srcset = el.querySelector("source").getAttribute("data-srcset").match(/^\S+\.jpg/)[0]
+                }
                 else {
-                srcset = el.querySelector("img").getAttribute("src");
+                  srcset = el.querySelector("img").getAttribute("src");
                 }
             } else {
                 if (el.getAttribute("data-imgsrc")) {
