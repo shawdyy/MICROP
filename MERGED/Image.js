@@ -8,6 +8,7 @@
  * * urlprepend: string
  * * urlappend: string
  * * webp: enum(True | False)
+ * * alternativeAttribute: string
  */
 const _MICROP = window.MICROP;
 return Promise.all(_MICROP.promises).then(() => {
@@ -17,26 +18,29 @@ return Promise.all(_MICROP.promises).then(() => {
     urlprepend = urlprepend ? urlprepend : "";
     urlappend = urlappend ? urlappend : "";
 
-    if(!selectorOrPath) MICROP.throwError("Provide selector(HTML) or jsonPath(JSON)");
+    if(!selectorOrPath) _MICROP.throwError("Provide selector(HTML) or jsonPath(JSON)");
 
-    if(dataSourceType === "html" || dataSourceType === "datasource_html"){
+    if(dataSourceType === "html" || dataSourceType === "datasource_html"){
         if(!dataSourceName) MICROP.throwError("Provide a dataSourceName");
         pro = Promise.all(_MICROP.promises).then(() => {
             const doc = _MICROP.domParser.parseFromString(_MICROP.dataSources[dataSourceName.toLowerCase()].data, "text/html");
             let el  = _MICROP.evaluateIndex(selectorOrPath, index, "html", doc);
+            let srcset;
+            let src;
             if (!el) {
                 _MICROP.debugLog("getImage","Couldn't find Element - Returned Fallback");
                 return "https://movableink-assets-production.s3.amazonaws.com/9144/a36cef8c-0a7e-4d42-bf74-7e5610f39a7f/84b38107-c9dd-44e0-8ee0-8e73f133e757.jpg";
             }
-            if (el.tagName === "DIV" && el.style.backgroundImage.length > 0) {
+            if(alternativeAttribute){
+                srcset = el.getAttribute(alternativeAttribute);
+            }
+            else if (el.tagName.toUpperCase() === "DIV" && el.style.backgroundImage.length > 0) {
                 let url = el.style.backgroundImage;
                 url = url.substring('url("'.length);
                 url = url.substring(0, url.indexOf('"'));
-                return url;
+                srcset =  url;
             }
-            let srcset;
-            let src;
-            if (el.tagName === "PICTURE") {
+            else if (el.tagName.toUpperCase() === "PICTURE") {
                 if (el.querySelector("source").srcset && el.querySelector("source").srcset.match(/^\S+\.jpg/)) {
                     srcset = el.querySelector("source").srcset.match(/^\S+\.jpg/)[0]
                 } else if (el.querySelector("source").getAttribute("data-lazysrcset") && el.querySelector("source").getAttribute("data-lazysrcset").match(/^\S+\.jpg/)) {
@@ -48,6 +52,10 @@ return Promise.all(_MICROP.promises).then(() => {
                 else {
                   srcset = el.querySelector("img").getAttribute("src");
                 }
+            }
+            else if(el.tagName.toUpperCase() === "SVG"){
+                let str = el.outerHTML;
+                return "data:image/svg+xml;base64," + btoa(str);
             } else {
                 if (el.getAttribute("data-imgsrc")) {
                     _MICROP.debugLog("getImage","data-imgsrc")
@@ -76,10 +84,10 @@ return Promise.all(_MICROP.promises).then(() => {
             }
             src = urlprepend + src + urlappend;
             _MICROP.debugLog("MICROP.getImage", src);
-            return src + ((src.indexOf("?") > 0) ? "&" : "?") + "imgeng=/f_jpg&imformat=generic";
+            return src;
         });
     }
-    else if(dataSourceType === "json" || dataSourceType === "datasource_json"){
+    else if(dataSourceType === "json" || dataSourceType === "datasource_json"){
         pro = Promise.all(_MICROP.promises).then(() => {
             try{
                 const parsed = _MICROP.dataSources[dataSourceName.toLowerCase()].data;
@@ -91,7 +99,7 @@ return Promise.all(_MICROP.promises).then(() => {
                 }
                 src = urlprepend + src + urlappend;
                 _MICROP.debugLog("MICROP.getImage", src);
-                return src + ((src.indexOf("?") > 0) ? "&" : "?") + "imgeng=/f_jpg&imformat=generic";
+                return src;
             }
             catch(err){
                 _MICROP.throwError("getImage::Couldn't find Image URL in jsonPATH");

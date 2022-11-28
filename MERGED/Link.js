@@ -7,6 +7,7 @@
  * * index: string
  * * urlprepend: string
  * * urlappend: string
+ * * alternativeAttribute: string
  */
 const _MICROP = window.MICROP;
 return Promise.all(_MICROP.promises).then(() => {
@@ -23,6 +24,9 @@ return Promise.all(_MICROP.promises).then(() => {
             if (!el) {
                 _MICROP.debugLog("getLink","Couldn't find Element - Returned Fallback");
                 return " ";
+            }
+            if(alternativeAttribute){
+                return urlprepend + el.getAttribute(alternativeAttribute) + urlappend;
             }
             return urlprepend + el.getAttribute("href") + urlappend;
         });
